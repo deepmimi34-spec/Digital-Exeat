@@ -259,9 +259,7 @@ SECURE_REFERRER_POLICY = "same-origin"
 X_FRAME_OPTIONS = "DENY"
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://your-actual-render-domain.onrender.com",
-]
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS")
 # ==========================================================
 # DATABASE
 # ==========================================================
