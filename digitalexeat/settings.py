@@ -89,17 +89,23 @@ if IS_PRODUCTION and not ALLOWED_HOSTS:
 # CSRF TRUSTED ORIGINS
 # ==========================================================
 
+# ==========================================================
+# CSRF TRUSTED ORIGINS
+# ==========================================================
+
 CSRF_TRUSTED_ORIGINS = [
     origin.strip().rstrip("/")
-    for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+    for origin in os.environ.get(
+        "CSRF_TRUSTED_ORIGINS", ""
+    ).split(",")
     if origin.strip()
 ]
 
 if RENDER_HOST:
     render_origin = f"https://{RENDER_HOST}"
-
     if render_origin not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(render_origin)
+
 
 
 # ==========================================================
@@ -259,11 +265,7 @@ SECURE_REFERRER_POLICY = "same-origin"
 X_FRAME_OPTIONS = "DENY"
 
 
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if origin.strip()
-]
+
 # ==========================================================
 # DATABASE
 # ==========================================================
