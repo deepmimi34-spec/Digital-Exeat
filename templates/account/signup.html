@@ -1,0 +1,77 @@
+
+{% load static socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create account | Digital-Exeat</title>
+    <link rel="stylesheet" href="{% static 'accounts/auth.css' %}">
+</head>
+<body>
+<main class="page">
+    <section class="auth-card">
+        <a class="brand" href="/">
+            <span class="brand-mark">DE</span>
+            <span>
+                <strong>Digital-Exeat</strong>
+                <small>Parent Portal</small>
+            </span>
+        </a>
+
+        <div class="heading">
+            <p class="eyebrow">NEW PARENT ACCOUNT</p>
+            <h1>Get started</h1>
+            <p>Create an account to access the parent portal.</p>
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <a class="google-button"
+           href="{% provider_login_url 'google' process='login' %}">
+            Continue with Google
+        </a>
+
+        <div class="separator"><span>or register with phone</span></div>
+
+        <form method="post" action="{{ request.path }}" class="auth-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="field">
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small>{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <small class="field-error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <button class="primary-button" type="submit">
+                Create account
+            </button>
+        </form>
+
+        <p class="switch-link">
+            Already registered?
+            <a href="{% url 'account_login' %}">Sign in</a>
+        </p>
+
+        <p class="security-note">
+            You'll need to verify your phone number. Linking your child
+            requires a separate school verification step.
+        </p>
+    </section>
+
+    <footer>Digital-Exeat · Secure parent access</footer>
+</main>
+</body>
+</html>

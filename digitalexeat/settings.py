@@ -130,7 +130,7 @@ INSTALLED_APPS = [
 
     # Add your own project apps here, for example:
     "schools",
-    # "students",
+    "authphone",
     # "guardians",
     # "external_exeat",
     # "internal_exeat",
@@ -186,7 +186,6 @@ TEMPLATES = [
     },
 ]
 
-
 # ==========================================================
 # AUTHENTICATION
 # ==========================================================
@@ -211,6 +210,18 @@ ACCOUNT_SIGNUP_FIELDS = [
 ]
 
 ACCOUNT_SESSION_REMEMBER = True
+
+ACCOUNT_ADAPTER = "authphone.adapter.DigitalExeatAccountAdapter"
+
+# Phone-based account login and registration.
+ACCOUNT_LOGIN_METHODS = {"phone"}
+ACCOUNT_SIGNUP_FIELDS = ["phone*"]
+
+# Require phone verification.
+ACCOUNT_PHONE_VERIFICATION_ENABLED = True
+ACCOUNT_PHONE_VERIFICATION_MAX_ATTEMPTS = 3
+ACCOUNT_PHONE_VERIFICATION_TIMEOUT = 900
+ACCOUNT_PHONE_VERIFICATION_SUPPORTS_RESEND = True
 
 # Enable this only if your registration process requires it:
 # ACCOUNT_EMAIL_VERIFICATION = "mandatory"
