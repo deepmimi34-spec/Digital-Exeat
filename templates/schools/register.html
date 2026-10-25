@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Register your school on Digital Exeat.">
+    <title>Register School | Digital Exeat</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6fa;
+            color: #17243b;
+        }
+
+        header {
+            background: #101d36;
+            color: white;
+            padding: 20px 6%;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 760px;
+            margin: 35px auto;
+            padding: 0 16px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 14px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(16, 29, 54, 0.07);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .intro {
+            color: #5e6879;
+            line-height: 1.6;
+        }
+
+        .notice {
+            background: #fff7df;
+            border-left: 4px solid #d5a32e;
+            padding: 12px;
+            line-height: 1.5;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field {
+            min-width: 0;
+            margin-bottom: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select,
+        textarea {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d4dae4;
+            border-radius: 7px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #fff;
+            color: #17243b;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid #9ab7e8;
+            border-color: #345b96;
+        }
+
+        .errors {
+            color: #b42318;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .error-summary {
+            background: #fff0ef;
+            border: 1px solid #f3b8b4;
+            color: #8f1d18;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 18px 0;
+            line-height: 1.5;
+        }
+
+        .success-message {
+            background: #ecfdf3;
+            border: 1px solid #a6e8c0;
+            color: #166534;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            border: 0;
+            border-radius: 8px;
+            background: #101d36;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #20375f;
+        }
+
+        .footer-link {
+            margin-bottom: 0;
+            text-align: center;
+            margin-top: 18px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #172f59;
+            font-weight: 600;
+        }
+
+        @media (max-width: 560px) {
+            main {
+                margin: 20px auto;
+            }
+
+            .fields {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+
+            header {
+                padding: 18px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>Digital Exeat</header>
+
+<main>
+    <section class="panel">
+        <h1>Register your school</h1>
+
+        <p class="intro">
+            Create an administrator account for your school.
+            Once approved, you can manage your school's exeat system.
+        </p>
+
+        <div class="notice">
+            <strong>Approval required:</strong>
+            Use your school's official contact details.
+            You will need approval before accessing the school dashboard.
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="success-message" role="status">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if form.errors %}
+            <div class="error-summary" role="alert">
+                <strong>Please check the form.</strong>
+                Correct the highlighted fields and submit again.
+            </div>
+        {% endif %}
+
+        <form
+            method="post"
+            action="{% url 'schools:school_signup' %}"
+            accept-charset="UTF-8"
+        >
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="errors" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="fields">
+                {% for field in form %}
+                    <div class="field {% if field.name == 'address' %}full{% endif %}">
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span aria-hidden="true">*</span>
+                            {% endif %}
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <small>{{ field.help_text }}</small>
+                        {% endif %}
+
+                        {% for error in field.errors %}
+                            <div class="errors" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit">Submit for approval</button>
+        </form>
+
+        <p class="footer-link">
+            Already registered?
+            <a href="/accounts/login/">Sign in</a>
+        </p>
+
+        <p class="footer-link" style="margin-top: 8px;">
+            <a href="/">Return to homepage</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

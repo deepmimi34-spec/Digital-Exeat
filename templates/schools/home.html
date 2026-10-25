@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Digital Exeat | School Exeat Management</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fa;
+            color: #17243b;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 7%;
+            background: #101d36;
+            color: white;
+        }
+        header a { color: white; text-decoration: none; }
+        .brand { font-size: 22px; font-weight: bold; }
+        .nav { display: flex; gap: 18px; flex-wrap: wrap; }
+        .hero {
+            max-width: 1100px;
+            margin: 55px auto;
+            padding: 30px 22px;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 35px;
+            align-items: center;
+        }
+        h1 { font-size: clamp(34px, 5vw, 54px); margin: 0 0 18px; }
+        .lead { color: #5d687b; line-height: 1.8; font-size: 17px; }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 25px; }
+        .btn {
+            display: inline-block;
+            padding: 13px 19px;
+            border-radius: 8px;
+            background: #101d36;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .secondary { background: white; color: #101d36; border: 1px solid #ccd3df; }
+        .panel {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px #101d3610;
+        }
+        .panel h2 { margin-top: 0; }
+        .step { padding: 13px 0; border-bottom: 1px solid #e8ebf1; line-height: 1.6; }
+        .step:last-child { border-bottom: 0; }
+        footer { text-align: center; padding: 24px; color: #687386; }
+        @media (max-width: 700px) {
+            .hero { grid-template-columns: 1fr; margin: 20px auto; }
+            header { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a class="brand" href="/">Digital Exeat</a>
+    <nav class="nav">
+        <a href="/accounts/login/">Sign in</a>
+        <a href="{% url 'schools:school_signup' %}">Register a school</a>
+    </nav>
+</header>
+
+<main class="hero">
+    <section>
+        <p><strong>Simple. Secure. Connected.</strong></p>
+        <h1>School exeat management, made easier.</h1>
+        <p class="lead">
+            Digital Exeat helps schools manage student exeat requests,
+            keep parents informed and track expected return times
+            in one organised platform.
+        </p>
+        <div class="actions">
+            <a class="btn" href="/accounts/login/">Sign in</a>
+            <a class="btn secondary" href="{% url 'schools:school_signup' %}">
+                Register your school
+            </a>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>How it works</h2>
+        <div class="step"><strong>1. Register</strong><br>Schools submit their details for verification.</div>
+        <div class="step"><strong>2. Get approved</strong><br>The platform administrator reviews the application.</div>
+        <div class="step"><strong>3. Connect</strong><br>Approved schools set up their school community.</div>
+        <div class="step"><strong>4. Manage exeats</strong><br>Parents apply, and authorised school staff review requests.</div>
+    </section>
+</main>
+
+<footer>Digital Exeat · Secure school and family coordination</footer>
+</body>
+</html>

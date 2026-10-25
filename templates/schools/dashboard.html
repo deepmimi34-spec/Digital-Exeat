@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ school.name }} | Digital Exeat</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: #f4f6fa;
+            color: #17243b;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 5%;
+            background: #101d36;
+            color: white;
+        }
+        header h2 { margin: 0; }
+        header form { margin: 0; }
+        button {
+            padding: 10px 14px;
+            border: 1px solid #ffffff66;
+            border-radius: 7px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+        }
+        main { max-width: 1100px; margin: 30px auto; padding: 0 18px; }
+        .welcome {
+            padding: 28px;
+            border-radius: 14px;
+            background: white;
+        }
+        .approved { color: #187548; font-weight: bold; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+        .card {
+            padding: 22px;
+            border-radius: 12px;
+            background: white;
+            border: 1px solid #e5e9f0;
+        }
+        .card p { color: #647084; line-height: 1.6; }
+        .coming { font-size: 13px; color: #8a6515; }
+        @media (max-width: 700px) {
+            .grid { grid-template-columns: 1fr; }
+            header { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h2>Digital Exeat</h2>
+    <form method="post" action="/accounts/logout/">
+        {% csrf_token %}
+        <button type="submit">Sign out</button>
+    </form>
+</header>
+
+<main>
+    <section class="welcome">
+        <p class="approved">✓ SCHOOL APPROVED</p>
+        <h1>Welcome, {{ school.name }}</h1>
+        <p>
+            Your school is approved. This is your starting point for
+            managing your school's exeat process.
+        </p>
+        <p><strong>School type:</strong> {{ school.get_school_type_display }}</p>
+        <p><strong>Location:</strong> {{ school.district }}, {{ school.region }}</p>
+    </section>
+
+    <section class="grid">
+        <article class="card">
+            <h3>Student records</h3>
+            <p>Manage student details and class information.</p>
+            <span class="coming">Coming next</span>
+        </article>
+        <article class="card">
+            <h3>Exeat applications</h3>
+            <p>Review requests and monitor expected return times.</p>
+            <span class="coming">Coming next</span>
+        </article>
+        <article class="card">
+            <h3>Staff and announcements</h3>
+            <p>Organise authorised staff and share school updates.</p>
+            <span class="coming">Coming next</span>
+        </article>
+    </section>
+</main>
+</body>
+</html>

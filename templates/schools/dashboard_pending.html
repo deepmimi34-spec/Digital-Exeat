@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Awaiting Approval | Digital Exeat</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background: #f4f6fa;
+            font-family: Arial, sans-serif;
+            color: #17243b;
+        }
+        main {
+            width: 100%;
+            max-width: 540px;
+            background: white;
+            padding: 32px;
+            box-sizing: border-box;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .icon { font-size: 44px; }
+        .status {
+            display: inline-block;
+            background: #fff3cd;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        p { line-height: 1.7; color: #5d687b; }
+        a { color: #172f59; }
+        form { margin-top: 22px; }
+        button {
+            padding: 11px 16px;
+            border: 1px solid #ccd3df;
+            border-radius: 7px;
+            background: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="icon">⏳</div>
+    <h1>School approval pending</h1>
+    <p>Hello {{ request.user.first_name|default:request.user.username }},</p>
+    <p>
+        Your registration for <strong>{{ school.name }}</strong> has been
+        received. A platform administrator must approve it before you
+        can use the school management dashboard.
+    </p>
+    <div class="status">Pending approval</div>
+    <p>You can sign out and return later to check your status.</p>
+    <form method="post" action="/accounts/logout/">
+        {% csrf_token %}
+        <button type="submit">Sign out</button>
+    </form>
+</main>
+</body>
+</html>

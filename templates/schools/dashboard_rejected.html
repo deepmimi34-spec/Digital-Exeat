@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registration Review | Digital Exeat</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background: #f4f6fa;
+            font-family: Arial, sans-serif;
+            color: #17243b;
+        }
+        main {
+            max-width: 540px;
+            width: 100%;
+            padding: 32px;
+            box-sizing: border-box;
+            background: white;
+            border-radius: 15px;
+        }
+        p { line-height: 1.7; color: #5d687b; }
+        .reason {
+            padding: 15px;
+            border-left: 4px solid #b42318;
+            background: #fff1f0;
+            color: #702019;
+            overflow-wrap: anywhere;
+        }
+        a { color: #172f59; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Registration needs attention</h1>
+    <p>
+        The registration for <strong>{{ school.name }}</strong>
+        has not been approved.
+    </p>
+
+    {% if school.rejection_reason %}
+        <h3>Review feedback</h3>
+        <div class="reason">{{ school.rejection_reason|linebreaksbr }}</div>
+    {% else %}
+        <p>Please contact the Digital Exeat platform administrator for details.</p>
+    {% endif %}
+
+    <p>
+        Please resolve the stated issue with the platform administrator
+        before attempting to register again.
+    </p>
+    <a href="/">Return to homepage</a>
+</main>
+</body>
+</html>
