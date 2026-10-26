@@ -172,3 +172,72 @@ def student_access(request):
             "access_requests": requests,
         },
     )
+
+
+
+@login_required
+def school_directory(request):
+    schools = School.objects.filter(
+        status=School.ApprovalStatus.APPROVED
+    ).order_by("name")
+
+    selected_school = None
+    verified = False
+
+    if request.method == "POST":
+        school_id = request.POST.get("school_id", "").strip()
+        admission_number = request.POST.get(
+            "admission_number", ""
+        ).strip()
+
+        if not school_id or not admission_number:
+            messages.error(
+                request,
+                "Please select your school and enter the admission number.",
+            )
+        else:
+            selected_school = schools.filter(pk=school_id).first()
+
+            if selected_school is None:
+                messages.error(
+                    request,
+                    "Please select a valid, approved school.",
+                )
+            else:
+                student = Student.objects.filter(
+                    school=selected_school,
+                    admission_number__iexact=admission_number,
+                ).first()
+
+                if student is None:
+                    messages.error(
+                        request,
+                        "We could not verify that admission number "
+                        "at the selected school. Please check the details "
+                        "or contact your school administrator.",
+                    )
+                else:
+                    verified = True
+
+                    # Store the verified student reference for the next
+                    # verification step. This is not proof of parenthood.
+                    request.session["verified_student_id"] = student.pk
+                    request.session["verified_school_id"] = (
+                        selected_school.pk
+                    )
+
+                    messages.success(
+                        request,
+                        "The admission number has been verified. "
+                        "Continue with the required identity verification.",
+                    )
+
+    return render(
+        request,
+        "students/school_directory.html",
+        {
+            "schools": schools,
+            "selected_school": selected_school,
+            "verified": verified,
+        },
+    )

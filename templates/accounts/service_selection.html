@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -6,17 +7,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta name="theme-color" content="#101827">
 
-    <title>Choose a Service | Digital-Exeat</title>
+    <meta name="description"
+          content="Choose your Digital-Exeat service, connect to your school, and access verified school services securely.">
 
-    {% load static %}
+    <title>Choose a Service | Digital-Exeat</title>
 
     <link rel="stylesheet"
           href="{% static 'accounts/service_selection.css' %}">
 </head>
-
 
 <body>
 
@@ -59,9 +59,9 @@
             <h1>How would you like to continue?</h1>
 
             <p>
-                Choose the service you need. Whether you are a parent,
-                a student, or representing a school, you can get started
-                from here.
+                Choose the service you need. Parents and students can find
+                their school, verify an admission number, and continue
+                with the required verification process.
             </p>
 
         </section>
@@ -69,6 +69,7 @@
 
         <!-- Service choices -->
         <section class="service-grid" aria-label="Available services">
+
 
             <!-- Parent or guardian -->
             <article class="service-card">
@@ -85,31 +86,32 @@
                 <h2>Parent or Guardian</h2>
 
                 <p class="service-description">
-                    Connect with your child's school and manage
-                    exeat requests in one convenient place.
+                    Find your child's school, verify their admission number,
+                    and continue with the process of linking your child
+                    to your account.
                 </p>
 
                 <ul class="service-features">
                     <li>
                         <span class="feature-check">✓</span>
-                        Link your child to your account
+                        Choose your child's school
                     </li>
 
                     <li>
                         <span class="feature-check">✓</span>
-                        Submit and track exeat requests
+                        Verify the admission number
                     </li>
 
                     <li>
                         <span class="feature-check">✓</span>
-                        Receive important school updates
+                        Request access to exeat services
                     </li>
                 </ul>
 
-                <!-- Replace URL name with your actual parent entry route -->
                 <a class="service-action"
-                   href="{% url 'students:link_child' %}">
-                    Continue as Parent
+                   href="{% url 'students:school_directory' %}">
+                    Find Your School
+
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M5 12h14"></path>
                         <path d="m12 5 7 7-7 7"></path>
@@ -137,35 +139,41 @@
                 <h2>Register a School</h2>
 
                 <p class="service-description">
-                    Bring your school onto Digital-Exeat and
-                    manage your school's services digitally.
+                    Register your school on Digital-Exeat, submit its details,
+                    and wait for platform verification before managing
+                    school services.
                 </p>
 
                 <ul class="service-features">
                     <li>
                         <span class="feature-check">✓</span>
-                        Submit your school's details
+                        Submit school information
                     </li>
 
                     <li>
                         <span class="feature-check">✓</span>
-                        Request school verification
+                        Add school details for review
                     </li>
 
                     <li>
                         <span class="feature-check">✓</span>
-                        Access school administration after approval
+                        Access administration after approval
                     </li>
                 </ul>
 
-                <!-- Replace URL name with your actual school registration route -->
                 <a class="service-action"
                    href="{% url 'schools:school_signup' %}">
                     Register a School
+
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M5 12h14"></path>
                         <path d="m12 5 7 7-7 7"></path>
                     </svg>
+                </a>
+
+                <a class="secondary-action"
+                   href="{% url 'schools:school_login' %}">
+                    Already registered? Sign in
                 </a>
 
             </article>
@@ -185,31 +193,32 @@
                 <h2>Student Access</h2>
 
                 <p class="service-description">
-                    Access the student services provided by
-                    your school through your verified account.
+                    Find your school and verify your admission number
+                    before continuing to the student services available
+                    to your account.
                 </p>
 
                 <ul class="service-features">
                     <li>
                         <span class="feature-check">✓</span>
-                        Connect to your existing student record
+                        Select your school
                     </li>
 
                     <li>
                         <span class="feature-check">✓</span>
-                        Access available school services
+                        Verify your student record
                     </li>
 
                     <li>
                         <span class="feature-check">✓</span>
-                        View relevant announcements and updates
+                        Continue with student verification
                     </li>
                 </ul>
 
-                <!-- Replace URL name with your actual student entry route -->
                 <a class="service-action"
-                   href="{% url 'student_access' %}">
-                    Continue as Student
+                   href="{% url 'students:school_directory' %}">
+                    Verify Student Details
+
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M5 12h14"></path>
                         <path d="m12 5 7 7-7 7"></path>
@@ -221,22 +230,42 @@
         </section>
 
 
+        <!-- School directory shortcut -->
+        <section class="directory-banner">
+
+            <div>
+                <h2>Can't find your school?</h2>
+
+                <p>
+                    Browse approved schools and check whether the student's
+                    admission number matches the school's records.
+                </p>
+            </div>
+
+            <a href="{% url 'students:school_directory' %}"
+               class="directory-button">
+                Browse Schools
+            </a>
+
+        </section>
+
+
         <!-- Verification notice -->
         <aside class="verification-notice">
 
             <div class="notice-icon" aria-hidden="true">i</div>
 
             <div>
-                <h3>Your account is not a role verification</h3>
+                <h3>Your account is not proof of school membership</h3>
 
                 <p>
-                    Signing in gives you access to your account, but
-                    it does not automatically make you a parent,
-                    student, or school administrator. Parents must
-                    verify their link to a child, students must be
-                    matched to an existing student record, and schools
-                    must be reviewed before administrative access is
-                    granted.
+                    Signing in gives you access to your account, but does
+                    not automatically establish that you are a parent,
+                    student, or school administrator. Students must match
+                    an existing record at their selected school. Parents
+                    must complete the required identity and child-linking
+                    checks. Schools must be approved before their
+                    administrators can access school management services.
                 </p>
             </div>
 
@@ -247,17 +276,86 @@
 
     <!-- Footer -->
     <footer class="footer">
+
         <p>
             <strong>Digital-Exeat</strong>
             &nbsp;·&nbsp; Secure, simple school services
         </p>
 
         <p>
-            Access depends on your school's verification and approval.
+            Access depends on school approval and the required verification.
         </p>
+
     </footer>
 
 </div>
+
+<style>
+    /* Additional styles for the new directory links */
+
+    .secondary-action {
+        display: block;
+        margin-top: 15px;
+        color: #9b1c31;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .secondary-action:hover {
+        text-decoration: underline;
+    }
+
+    .directory-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+        margin-top: 30px;
+        padding: 25px;
+        background: #ffffff;
+        border: 1px solid #e2e6ed;
+        border-radius: 14px;
+    }
+
+    .directory-banner h2 {
+        margin: 0 0 8px;
+        font-size: 20px;
+    }
+
+    .directory-banner p {
+        margin: 0;
+        color: #606b7b;
+        line-height: 1.6;
+    }
+
+    .directory-button {
+        display: inline-block;
+        flex-shrink: 0;
+        padding: 12px 20px;
+        background: #9b1c31;
+        color: #ffffff;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .directory-button:hover {
+        background: #791426;
+    }
+
+    @media (max-width: 600px) {
+        .directory-banner {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .directory-button {
+            text-align: center;
+        }
+    }
+</style>
 
 </body>
 </html>

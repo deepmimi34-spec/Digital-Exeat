@@ -14,4 +14,9 @@ urlpatterns = [
         views.student_access,
         name="student_access",
     ),
+    path(
+        "school-directory/",
+        views.school_directory,
+        name="school_directory",
+    ),
 ]

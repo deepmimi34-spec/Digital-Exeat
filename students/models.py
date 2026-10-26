@@ -3,28 +3,31 @@ from django.conf import settings
 from django.db import models
 
 
+from django.db import models
+
+
 class Student(models.Model):
     school = models.ForeignKey(
         "schools.School",
         on_delete=models.PROTECT,
         related_name="students",
     )
+
     admission_number = models.CharField(max_length=50)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     other_names = models.CharField(max_length=150, blank=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-
     class Meta:
-        ordering = ["last_name", "first_name"]
         constraints = [
             models.UniqueConstraint(
                 fields=["school", "admission_number"],
                 name="unique_student_admission_per_school",
-            ),
+            )
         ]
 
+    def __str__(self):
+        return f"{self.admission_number} - {self.school.name}"
     @property
     def full_name(self):
         return " ".join(

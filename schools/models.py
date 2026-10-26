@@ -31,7 +31,17 @@ class School(models.Model):
         on_delete=models.PROTECT,
         related_name="managed_school",
     )
+    nickname = models.CharField(
+        max_length=50,
+        unique=True,
+        help_text="Short name students and parents recognize, e.g. Botwe.",
+    )
 
+    logo = models.ImageField(
+        upload_to="school_logos/",
+        blank=True,
+        null=True,
+    )
     status = models.CharField(
         max_length=20,
         choices=ApprovalStatus.choices,
