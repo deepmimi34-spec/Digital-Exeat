@@ -63,8 +63,9 @@ def school_signup(request):
 
 @require_http_methods(["GET", "POST"])
 def school_login(request):
+    # If already signed in, route to the correct destination.
     if request.user.is_authenticated:
-        return redirect("schools:school_portal")
+        return redirect("schools:dashboard")
 
     if request.method == "POST":
         form = SchoolLoginForm(request.POST)
@@ -75,6 +76,7 @@ def school_login(request):
             email = form.cleaned_data["administrator_email"].strip()
             password = form.cleaned_data["password"]
 
+            # Verify the username and password.
             user = authenticate(
                 request,
                 username=username,
@@ -86,25 +88,21 @@ def school_login(request):
                 and user.email
                 and user.email.casefold() == email.casefold()
             ):
-                try:
-                    school = School.objects.get(
-                        administrator=user,
-                        name__iexact=school_name,
-                    )
-                except School.DoesNotExist:
-                    school = None
+                school = School.objects.filter(
+                    administrator=user,
+                    name__iexact=school_name,
+                ).first()
 
                 if school is not None:
                     login(request, user)
 
-                    # Let the existing dashboard route decide
-                    # what the school administrator can access.
-                    return redirect("schools:school_portal")
+                    # The dashboard decides what this account can access.
+                    return redirect("schools:dashboard")
 
             messages.error(
                 request,
-                "The details entered could not be verified. "
-                "Check your school name, username, email and password.",
+                "We could not verify your details. Please check your "
+                "school name, username, email and password.",
             )
     else:
         form = SchoolLoginForm()
@@ -114,7 +112,6 @@ def school_login(request):
         "schools/school_login.html",
         {"form": form},
     )
-
 
 @staff_member_required
 @require_POST
@@ -285,25 +282,4 @@ def no_school_access(request):
         request,
         "schools/no_school_access.html",
         status=403,
-    )
-
-@login_required
-def school_portal(request):
-    if request.user.is_superuser:
-        return redirect("/admin/")
-
-    try:
-        school = School.objects.get(administrator=request.user)
-    except School.DoesNotExist:
-        messages.info(
-            request,
-            "No school is linked to this account. "
-            "Please register your school first.",
-        )
-        return redirect("service_selection")
-
-    return render(
-        request,
-        "schools/school_portal.html",
-        {"school": school},
     )

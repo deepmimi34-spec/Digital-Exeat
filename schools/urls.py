@@ -4,12 +4,17 @@ from . import views
 app_name = "schools"
 
 urlpatterns = [
+    path("", views.home, name="home"),
+
     path("register/", views.school_signup, name="school_signup"),
+    path("login/", views.school_login, name="school_login"),
+
     path(
         "registration-pending/",
         views.school_registration_pending,
         name="school_registration_pending",
     ),
+
     path("dashboard/", views.dashboard, name="dashboard"),
     path(
         "dashboard/pending/",
@@ -27,12 +32,9 @@ urlpatterns = [
         name="school_dashboard",
     ),
 
-    path("login/", views.school_login, name="school_login"),
-
     path(
-        "portal/",
-        views.school_portal,
-        name="school_portal",
+        "no-access/",
+        views.no_school_access,
+        name="no_school_access",
     ),
-
 ]
