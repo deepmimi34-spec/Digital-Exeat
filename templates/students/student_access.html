@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Access | Digital-Exeat</title>
+
+    <style>
+        :root {
+            --primary: #7a1020;
+            --primary-dark: #520b16;
+            --background: #f5f6fa;
+            --text: #202433;
+            --muted: #687080;
+            --border: #e1e5ec;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 7%;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .brand span {
+            color: #f1d9dd;
+            font-weight: 400;
+        }
+
+        main {
+            width: min(100% - 32px, 680px);
+            margin: 45px auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(20, 30, 50, 0.06);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #f7e8eb;
+            color: var(--primary);
+            border-radius: 20px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(25px, 5vw, 34px);
+            margin: 18px 0 10px;
+        }
+
+        .intro {
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin: 20px 0 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(122, 16, 32, 0.1);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+        }
+
+        .notice {
+            background: #fff8e8;
+            border: 1px solid #f0dfb5;
+            color: #6c5215;
+            padding: 14px;
+            border-radius: 9px;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 24px;
+        }
+
+        .messages {
+            padding: 0;
+            list-style: none;
+        }
+
+        .messages li {
+            padding: 13px;
+            background: #eaf7ed;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            color: #205b30;
+        }
+
+        .request-list {
+            margin-top: 30px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .request {
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .request p {
+            margin: 5px 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .status {
+            font-weight: 700;
+        }
+
+        .errorlist {
+            color: #b42318;
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 480px) {
+            main {
+                margin: 25px auto;
+            }
+
+            .card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="brand">Digital-Exeat <span>| Student Portal</span></div>
+</header>
+
+<main>
+    <a class="back-link" href="{% url 'service_selection' %}">
+        &larr; Back to services
+    </a>
+
+    <section class="card">
+        <span class="badge">STUDENT ACCESS</span>
+
+        <h1>Access your student portal</h1>
+
+        <p class="intro">
+            Enter your school admission number and full name to request
+            access. Your school must verify your details before your
+            student access is approved.
+        </p>
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            <label for="{{ form.admission_number.id_for_label }}">
+                Admission number
+            </label>
+            {{ form.admission_number }}
+            {{ form.admission_number.errors }}
+
+            <label for="{{ form.full_name.id_for_label }}">
+                Full name
+            </label>
+            {{ form.full_name }}
+            {{ form.full_name.errors }}
+
+            <button type="submit">Request Student Access</button>
+        </form>
+
+        <div class="notice">
+            <strong>Security notice</strong><br>
+            Submitting this form does not grant immediate access.
+            The school must verify your identity and approve your request.
+        </div>
+
+        {% if access_requests %}
+            <div class="request-list">
+                <h2>Your access requests</h2>
+
+                {% for item in access_requests %}
+                    <div class="request">
+                        <strong>{{ item.student.school.name }}</strong>
+                        <p>
+                            Request submitted:
+                            {{ item.requested_at|date:"j M Y, H:i" }}
+                        </p>
+                        <p>
+                            Status:
+                            <span class="status">
+                                {{ item.get_status_display }}
+                            </span>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+</main>
+
+<footer>
+    Digital-Exeat &middot; Secure School Access
+</footer>
+</body>
+</html>

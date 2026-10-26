@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from schools import views as school_views
+from accounts import views as account_views
 
 urlpatterns = [
     path("", school_views.home, name="home"),
@@ -28,4 +29,10 @@ urlpatterns = [
 
     # Django login, logout and password reset routes
     path("accounts/", include("allauth.urls")),
+    path("students/", include("students.urls")),
+    path(
+        "services/",
+        account_views.service_selection,
+        name="service_selection",
+    ),
 ]

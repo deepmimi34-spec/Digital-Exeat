@@ -62,3 +62,43 @@ class SchoolRegistrationForm(forms.Form):
             self.add_error("confirm_password", "The passwords do not match.")
 
         return cleaned_data
+
+
+from django import forms
+
+
+class SchoolLoginForm(forms.Form):
+    school_name = forms.CharField(
+        max_length=200,
+        label="School name",
+        widget=forms.TextInput(attrs={
+            "placeholder": "Enter your registered school name",
+            "autocomplete": "organization",
+        }),
+    )
+
+    administrator_username = forms.CharField(
+        max_length=150,
+        label="Administrator username",
+        widget=forms.TextInput(attrs={
+            "placeholder": "Enter your username",
+            "autocomplete": "username",
+        }),
+    )
+
+    administrator_email = forms.EmailField(
+        label="Administrator email",
+        widget=forms.EmailInput(attrs={
+            "placeholder": "Enter your registered email",
+            "autocomplete": "email",
+        }),
+    )
+
+    password = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            "placeholder": "Enter your password",
+            "autocomplete": "current-password",
+        }),
+    )

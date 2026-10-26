@@ -1,77 +1,117 @@
-
 {% load static socialaccount %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#101827">
+    <meta name="description"
+          content="Sign in to Digital-Exeat to access school, parent, and student services.">
+
     <title>Sign in | Digital-Exeat</title>
+
     <link rel="stylesheet" href="{% static 'accounts/auth.css' %}">
 </head>
+
 <body>
 <main class="page">
+
     <section class="auth-card">
-        <a class="brand" href="/">
+
+        <!-- Brand -->
+        <a class="brand" href="/digitalexeat/static" aria-label="Digital-Exeat home">
             <span class="brand-mark">DE</span>
-            <span>
+
+            <span class="brand-text">
                 <strong>Digital-Exeat</strong>
-                <small>Parent Portal</small>
+                <small>One platform. Different services.</small>
             </span>
         </a>
 
-        <div class="heading">
-            <p class="eyebrow">PARENT ACCESS</p>
-            <h1>Welcome back</h1>
-            <p>Sign in to manage your child's exeat requests.</p>
-        </div>
+        <!-- Heading -->
+        <header class="heading">
+            <span class="eyebrow">SECURE ACCOUNT ACCESS</span>
 
+            <h1>Welcome back</h1>
+
+            <p>
+                Sign in to continue to Digital-Exeat.
+                You can choose your service after signing in.
+            </p>
+        </header>
+
+        <!-- Django messages -->
         {% if messages %}
-            {% for message in messages %}
-                <div class="notice">{{ message }}</div>
-            {% endfor %}
+            <div class="messages" aria-live="polite">
+                {% for message in messages %}
+                    <div class="notice {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
 
         {% if form.non_field_errors %}
-            <div class="error">
+            <div class="error" role="alert">
                 {{ form.non_field_errors }}
             </div>
         {% endif %}
 
+        <!-- Google sign-in -->
         <a class="google-button"
            href="{% provider_login_url 'google' process='login' %}">
-            <svg viewBox="0 0 48 48" aria-hidden="true">
-                <path fill="#EA4335"
-                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z"
-                    transform="translate(0 5)"/>
+
+            <svg viewBox="0 0 48 48"
+                 width="21"
+                 height="21"
+                 aria-hidden="true">
                 <path fill="#4285F4"
-                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.75 7.18l7.73 6C44.43 37.97 46.98 31.8 46.98 24.55Z"/>
-                <path fill="#FBBC05"
-                    d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.75-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.86.92 7.52 2.52 10.78l8.01-6.19Z"
-                    transform="translate(0 5)"/>
+                      d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15Z"/>
                 <path fill="#34A853"
-                    d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.14 1.44-4.89 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-8.01 6.19C6.51 42.62 14.62 48 24 48Z"/>
+                      d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4.1 2-6.9 2-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44Z"/>
+                <path fill="#FBBC05"
+                      d="M12.6 27.6a12 12 0 0 1 0-7.2v-5.3H5.8a20 20 0 0 0 0 17.8l6.8-5.3Z"/>
+                <path fill="#EA4335"
+                      d="M24 12c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 6 29.5 4 24 4A20 20 0 0 0 5.8 15.1l6.8 5.3C14.2 15.6 18.7 12 24 12Z"/>
             </svg>
-            Continue with Google
+
+            <span>Continue with Google</span>
         </a>
 
-        <div class="separator"><span>or use your phone</span></div>
+        <div class="separator">
+            <span>or sign in with your account</span>
+        </div>
 
-        <form method="post" action="{{ request.path }}" class="auth-form">
+        <!-- Standard sign-in form -->
+        <form method="post"
+              action="{{ request.path }}"
+              class="auth-form">
+
             {% csrf_token %}
 
             {% for field in form %}
                 <div class="field">
+
                     <label for="{{ field.id_for_label }}">
                         {{ field.label }}
                     </label>
+
                     {{ field }}
+
                     {% if field.help_text %}
-                        <small>{{ field.help_text }}</small>
+                        <small class="help-text">
+                            {{ field.help_text }}
+                        </small>
                     {% endif %}
+
                     {% for error in field.errors %}
-                        <small class="field-error">{{ error }}</small>
+                        <small class="field-error">
+                            {{ error }}
+                        </small>
                     {% endfor %}
+
                 </div>
             {% endfor %}
 
@@ -82,22 +122,39 @@
             {% endif %}
 
             <button class="primary-button" type="submit">
-                Continue
+                Sign in
+                <span aria-hidden="true">→</span>
             </button>
         </form>
 
-        <p class="switch-link">
-            New parent?
-            <a href="{% url 'account_signup' %}">Create an account</a>
-        </p>
+        <!-- Account creation -->
+        <div class="signup-prompt">
+            <p>New to Digital-Exeat?</p>
 
-        <p class="security-note">
-            Signing in does not automatically link you to a student.
-            Student verification is handled separately.
-        </p>
+            <a href="{% url 'account_signup' %}">
+                Create an account
+            </a>
+        </div>
+
+        <!-- Important clarification -->
+        <div class="security-note">
+            <span class="security-icon" aria-hidden="true">✓</span>
+
+            <p>
+                <strong>One account, your choice.</strong>
+                Signing in does not make you a parent, student,
+                or school administrator. Choose your role after
+                signing in.
+            </p>
+        </div>
+
     </section>
 
-    <footer>Digital-Exeat · Secure parent access</footer>
+    <footer class="page-footer">
+        <span>Digital-Exeat</span>
+        <span>Secure access for schools and their communities</span>
+    </footer>
+
 </main>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 from django.urls import path
 from . import views
 
@@ -27,14 +26,13 @@ urlpatterns = [
         views.school_dashboard,
         name="school_dashboard",
     ),
+
+    path("login/", views.school_login, name="school_login"),
+
     path(
-        "no-access/",
-        views.no_school_access,
-        name="no_school_access",
+        "portal/",
+        views.school_portal,
+        name="school_portal",
     ),
-    path(
-        "review/<int:school_id>/",
-        views.review_school,
-        name="review_school",
-    ),
+
 ]

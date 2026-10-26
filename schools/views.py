@@ -1,19 +1,22 @@
-
 from django.contrib import messages
-from django.contrib.auth import get_user_model
-from django.db import transaction
-from django.shortcuts import render, redirect
-from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.shortcuts import get_object_or_404, render, redirect
+from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
 
-from .forms import SchoolRegistrationForm
+from .forms import SchoolRegistrationForm, SchoolLoginForm
 from .models import School
 
 User = get_user_model()
 
 
 def school_signup(request):
+    # Registration is public, but the administrator account is created
+    # only when the submitted registration form is valid.
     if request.method == "POST":
         form = SchoolRegistrationForm(request.POST)
 
@@ -42,10 +45,12 @@ def school_signup(request):
 
             messages.success(
                 request,
-                "Your registration has been submitted. "
-                "You can sign in after your schools is approved.",
+                "Your school registration has been submitted. "
+                "You can access the school portal after approval.",
             )
+
             return redirect("schools:school_registration_pending")
+
     else:
         form = SchoolRegistrationForm()
 
@@ -56,18 +61,65 @@ def school_signup(request):
     )
 
 
-def school_registration_pending(request):
+@require_http_methods(["GET", "POST"])
+def school_login(request):
+    if request.user.is_authenticated:
+        return redirect("schools:school_portal")
+
+    if request.method == "POST":
+        form = SchoolLoginForm(request.POST)
+
+        if form.is_valid():
+            school_name = form.cleaned_data["school_name"].strip()
+            username = form.cleaned_data["administrator_username"].strip()
+            email = form.cleaned_data["administrator_email"].strip()
+            password = form.cleaned_data["password"]
+
+            user = authenticate(
+                request,
+                username=username,
+                password=password,
+            )
+
+            if (
+                user is not None
+                and user.email
+                and user.email.casefold() == email.casefold()
+            ):
+                try:
+                    school = School.objects.get(
+                        administrator=user,
+                        name__iexact=school_name,
+                    )
+                except School.DoesNotExist:
+                    school = None
+
+                if school is not None:
+                    login(request, user)
+
+                    # Let the existing dashboard route decide
+                    # what the school administrator can access.
+                    return redirect("schools:school_portal")
+
+            messages.error(
+                request,
+                "The details entered could not be verified. "
+                "Check your school name, username, email and password.",
+            )
+    else:
+        form = SchoolLoginForm()
+
     return render(
         request,
-        "schools/registration_pending.html",
+        "schools/school_login.html",
+        {"form": form},
     )
 
 
 @staff_member_required
 @require_POST
 def review_school(request, school_id):
-    # Only platform staff can approve or reject schools registrations.
-    from django.shortcuts import get_object_or_404
+    """Allow platform staff to approve or reject school registrations."""
 
     school = get_object_or_404(School, pk=school_id)
     action = request.POST.get("action")
@@ -76,6 +128,7 @@ def review_school(request, school_id):
         school.status = School.ApprovalStatus.APPROVED
         school.rejection_reason = ""
         school.reviewed_at = timezone.now()
+
         school.save(
             update_fields=[
                 "status",
@@ -83,18 +136,26 @@ def review_school(request, school_id):
                 "reviewed_at",
             ]
         )
-        messages.success(request, f"{school.name} has been approved.")
+
+        messages.success(
+            request,
+            f"{school.name} has been approved.",
+        )
 
     elif action == "reject":
         reason = request.POST.get("reason", "").strip()
 
         if not reason:
-            messages.error(request, "Provide a reason before rejecting.")
+            messages.error(
+                request,
+                "Provide a reason before rejecting this school.",
+            )
             return redirect("admin:schools_school_changelist")
 
         school.status = School.ApprovalStatus.REJECTED
         school.rejection_reason = reason
         school.reviewed_at = timezone.now()
+
         school.save(
             update_fields=[
                 "status",
@@ -102,89 +163,48 @@ def review_school(request, school_id):
                 "reviewed_at",
             ]
         )
-        messages.success(request, f"{school.name} has been rejected.")
+
+        messages.success(
+            request,
+            f"{school.name} has been rejected.",
+        )
 
     else:
         messages.error(request, "Invalid review action.")
 
     return redirect("admin:schools_school_changelist")
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from .models import School
-
-
-@login_required
-def school_dashboard(request):
-    school = School.objects.filter(
-        administrator=request.user
-    ).first()
-
-    if school is None:
-        return render(
-            request,
-            "schools/no_school_access.html",
-            status=403,
-        )
-
-    if school.status != School.ApprovalStatus.APPROVED:
-        return render(
-            request,
-            "schools/registration_pending.html",
-            status=403,
-        )
-
-    return render(
-        request,
-        "schools/dashboard.html",
-        {"schools": school},
-
-    )
-
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-
-from .models import School
-
 
 def home(request):
     """Public landing page."""
-    if request.user.is_authenticated:
-        return redirect("schools:dashboard")
-
     return render(request, "schools/home.html")
 
 
 @login_required
 def dashboard(request):
-    """Send each authenticated user to the appropriate destination."""
+    """Direct authenticated users to the appropriate destination."""
 
-    # Platform administrator
     if request.user.is_superuser:
         return redirect("/admin/")
 
-    # School administrator
     school = School.objects.filter(
         administrator=request.user
     ).first()
 
-    if school:
-        if school.status == School.ApprovalStatus.PENDING:
-            return redirect("schools:dashboard_pending")
+    if school is None:
+        # Users without a school account can choose another service.
+        return redirect("service_selection")
 
-        if school.status == School.ApprovalStatus.REJECTED:
-            return redirect("schools:dashboard_rejected")
+    if school.status == School.ApprovalStatus.PENDING:
+        return redirect("schools:dashboard_pending")
 
-        if school.status == School.ApprovalStatus.APPROVED:
-            return redirect("schools:school_dashboard")
+    if school.status == School.ApprovalStatus.REJECTED:
+        return redirect("schools:dashboard_rejected")
 
-    # Other account types will be routed here when their roles are built.
-    return render(
-        request,
-        "schools/no_school_access.html",
-        status=403,
-    )
+    if school.status == School.ApprovalStatus.APPROVED:
+        return redirect("schools:school_dashboard")
+
+    return redirect("service_selection")
 
 
 @login_required
@@ -233,6 +253,11 @@ def dashboard_rejected(request):
 
 @login_required
 def school_dashboard(request):
+    """Allow approved school administrators into their school portal."""
+
+    if request.user.is_superuser:
+        return redirect("/admin/")
+
     school = School.objects.filter(
         administrator=request.user,
         status=School.ApprovalStatus.APPROVED,
@@ -248,10 +273,37 @@ def school_dashboard(request):
     )
 
 
+def school_registration_pending(request):
+    return render(
+        request,
+        "schools/registration_pending.html",
+    )
+
 @login_required
 def no_school_access(request):
     return render(
         request,
         "schools/no_school_access.html",
         status=403,
+    )
+
+@login_required
+def school_portal(request):
+    if request.user.is_superuser:
+        return redirect("/admin/")
+
+    try:
+        school = School.objects.get(administrator=request.user)
+    except School.DoesNotExist:
+        messages.info(
+            request,
+            "No school is linked to this account. "
+            "Please register your school first.",
+        )
+        return redirect("service_selection")
+
+    return render(
+        request,
+        "schools/school_portal.html",
+        {"school": school},
     )

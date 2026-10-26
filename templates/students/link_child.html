@@ -1,0 +1,428 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#7a1020">
+
+    <title>Link Your Child | Digital-Exeat</title>
+
+    <style>
+        :root {
+            --crimson: #7a1020;
+            --crimson-dark: #520b16;
+            --crimson-light: #f9edef;
+            --black: #191919;
+            --text: #303542;
+            --muted: #737987;
+            --border: #e1e4ea;
+            --background: #f5f6fa;
+            --white: #ffffff;
+            --success-bg: #eaf7ed;
+            --success-text: #226337;
+            --error: #b42318;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+
+        .topbar {
+            background: var(--crimson);
+            color: var(--white);
+            padding: 20px 7%;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand span {
+            color: #f2dce0;
+            font-weight: 400;
+        }
+
+        /* Main layout */
+
+        main {
+            width: min(100% - 32px, 560px);
+            margin: 42px auto;
+            flex: 1;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 22px;
+            color: var(--crimson);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--crimson-dark);
+            text-decoration: underline;
+        }
+
+        /* Form card */
+
+        .card {
+            background: var(--white);
+            border: 1px solid #eceef2;
+            border-radius: 18px;
+            padding: 34px;
+            box-shadow: 0 12px 35px rgba(24, 30, 50, 0.06);
+        }
+
+        .icon {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--crimson-light);
+            color: var(--crimson);
+            border-radius: 15px;
+            font-size: 26px;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: var(--crimson);
+            background: var(--crimson-light);
+            padding: 7px 11px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            color: var(--black);
+            font-size: clamp(26px, 5vw, 34px);
+            letter-spacing: -0.8px;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 26px;
+        }
+
+        /* Messages */
+
+        .messages {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .messages li {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid #ccebd3;
+            border-radius: 9px;
+            padding: 13px 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .messages li.error {
+            background: #fef0ef;
+            border-color: #f8d0cc;
+            color: var(--error);
+        }
+
+        /* Form fields */
+
+        form {
+            width: 100%;
+        }
+
+        .form-errors {
+            color: var(--error);
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .field {
+            margin-bottom: 21px;
+        }
+
+        .field label {
+            display: block;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            display: block;
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field input::placeholder {
+            color: #a0a5b0;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: var(--crimson);
+            box-shadow: 0 0 0 3px rgba(122, 16, 32, 0.09);
+        }
+
+        .field ul.errorlist {
+            list-style: none;
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 7px;
+        }
+
+        .help-text {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: 7px;
+        }
+
+        /* Security information */
+
+        .security-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #fff8e8;
+            border: 1px solid #f0e2bf;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 23px;
+        }
+
+        .security-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .security-note strong {
+            display: block;
+            color: #745516;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .security-note p {
+            color: #786b4e;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* Submit button */
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 18px;
+            margin-top: 24px;
+            border: none;
+            border-radius: 10px;
+            background: var(--crimson);
+            color: var(--white);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: var(--crimson-dark);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:focus-visible {
+            outline: 3px solid #c98792;
+            outline-offset: 3px;
+        }
+
+        /* Footer */
+
+        footer {
+            text-align: center;
+            padding: 22px 16px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        footer strong {
+            color: var(--crimson);
+        }
+
+        /* Mobile */
+
+        @media (max-width: 520px) {
+            .topbar {
+                padding: 18px 20px;
+            }
+
+            .brand {
+                font-size: 20px;
+            }
+
+            main {
+                margin: 25px auto;
+            }
+
+            .card {
+                padding: 24px 20px;
+                border-radius: 14px;
+            }
+
+            .description {
+                font-size: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            Digital-Exeat <span>| Parent Portal</span>
+        </div>
+    </header>
+
+    <main>
+        <a class="back-link" href="{% url 'service_selection' %}">
+            &larr; Back to services
+        </a>
+
+        <section class="card">
+
+            <div class="icon" aria-hidden="true">&#128106;</div>
+
+            <span class="eyebrow">PARENT VERIFICATION</span>
+
+            <h1>Link your child</h1>
+
+            <p class="description">
+                Connect your account to your child's school record.
+                Enter their admission number and full name to begin
+                the verification process.
+            </p>
+
+            {% if messages %}
+                <ul class="messages" aria-live="polite">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="field">
+                        {{ field.label_tag }}
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <span class="help-text">
+                                {{ field.help_text }}
+                            </span>
+                        {% endif %}
+
+                        {% if field.errors %}
+                            <div class="form-errors" role="alert">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="submit-btn">
+                    Submit verification request &rarr;
+                </button>
+            </form>
+
+            <div class="security-note">
+                <span class="security-icon" aria-hidden="true">&#128274;</span>
+
+                <div>
+                    <strong>Your child's information is protected</strong>
+                    <p>
+                        Submitting this form does not grant immediate
+                        access. The school must verify your relationship
+                        with the student before access is approved.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <strong>Digital-Exeat</strong><br>
+        Secure access. Easier school communication.
+    </footer>
+
+</body>
+</html>

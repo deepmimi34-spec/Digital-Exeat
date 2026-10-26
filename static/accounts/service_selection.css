@@ -1,0 +1,466 @@
+/* ==============================
+   DIGITAL-EXEAT SERVICE SELECTION
+   ============================== */
+
+:root {
+    --navy: #101827;
+    --crimson: #b4233c;
+    --crimson-dark: #941b30;
+    --text: #172033;
+    --muted: #687386;
+    --border: #e1e6ee;
+    --background: #f4f6fa;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(
+            circle at 5% 5%,
+            rgba(180, 35, 60, 0.08),
+            transparent 30%
+        ),
+        var(--background);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+
+.topbar {
+    width: 100%;
+    padding: 18px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-mark {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    color: #fff;
+    background: var(--crimson);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.brand-text strong {
+    color: var(--navy);
+    font-size: 16px;
+}
+
+.brand-text small {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.account-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.account-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.signout-button {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.signout-button:hover {
+    color: var(--crimson);
+    border-color: var(--crimson);
+}
+
+/* Main section */
+
+.main-content {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    flex: 1;
+}
+
+.intro {
+    max-width: 650px;
+    margin: 0 auto 42px;
+    text-align: center;
+}
+
+.eyebrow {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--crimson);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+}
+
+.intro h1 {
+    margin: 0 0 15px;
+    color: var(--navy);
+    font-size: clamp(30px, 5vw, 43px);
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.intro > p {
+    max-width: 520px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* Service cards */
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.service-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 23px 23px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--white);
+    box-shadow: 0 8px 28px rgba(16, 24, 39, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(16, 24, 39, 0.09);
+}
+
+.service-icon {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 21px;
+    border-radius: 15px;
+    color: var(--crimson);
+    background: #fff0f2;
+}
+
+.service-icon svg {
+    width: 27px;
+    height: 27px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.service-card h2 {
+    margin: 0 0 12px;
+    color: var(--navy);
+    font-size: 19px;
+}
+
+.service-description {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.service-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0 0 25px;
+    padding: 17px 0 0;
+    border-top: 1px solid #edf0f5;
+    list-style: none;
+}
+
+.service-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    color: #455064;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.feature-check {
+    flex-shrink: 0;
+    color: var(--crimson);
+    font-weight: 900;
+}
+
+/* Service buttons */
+
+.service-action {
+    width: 100%;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 12px;
+    border: 1px solid var(--crimson);
+    border-radius: 10px;
+    color: #fff;
+    background: var(--crimson);
+    font-size: 12px;
+    font-weight: 750;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.service-action:hover {
+    background: var(--crimson-dark);
+}
+
+.service-action svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+.school-card .service-icon {
+    color: #263a59;
+    background: #edf2fa;
+}
+
+.school-card .service-action {
+    border-color: var(--navy);
+    background: var(--navy);
+}
+
+.school-card .service-action:hover {
+    background: #263a59;
+}
+
+.student-card .service-icon {
+    color: #167647;
+    background: #eaf7ef;
+}
+
+.student-card .service-action {
+    border-color: #167647;
+    background: #167647;
+}
+
+.student-card .service-action:hover {
+    background: #105b35;
+}
+
+/* Verification notice */
+
+.verification-notice {
+    max-width: 800px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin: 35px auto 0;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.notice-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    color: var(--crimson);
+    background: #fff0f2;
+    font-weight: 800;
+}
+
+.verification-notice h3 {
+    margin: 0 0 6px;
+    color: var(--navy);
+    font-size: 13px;
+}
+
+.verification-notice p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+/* Footer */
+
+.footer {
+    padding: 22px 20px;
+    border-top: 1px solid var(--border);
+    background: #fff;
+    text-align: center;
+}
+
+.footer p {
+    margin: 4px 0;
+    color: #8791a1;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.footer strong {
+    color: #596477;
+}
+
+/* Keyboard accessibility */
+
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid rgba(180, 35, 60, 0.35);
+    outline-offset: 4px;
+}
+
+/* Tablet */
+
+@media (max-width: 850px) {
+    .main-content {
+        padding-top: 45px;
+    }
+
+    .service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .service-card:last-child {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 560px) {
+    .topbar {
+        padding: 15px 18px;
+    }
+
+    .brand-mark {
+        width: 39px;
+        height: 39px;
+    }
+
+    .brand-text strong {
+        font-size: 14px;
+    }
+
+    .brand-text small {
+        font-size: 10px;
+    }
+
+    .account-label {
+        display: none;
+    }
+
+    .signout-button {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+
+    .main-content {
+        padding: 38px 17px;
+    }
+
+    .intro {
+        margin-bottom: 30px;
+    }
+
+    .intro h1 {
+        font-size: 31px;
+    }
+
+    .intro > p {
+        font-size: 13px;
+    }
+
+    .service-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .service-card:last-child {
+        grid-column: auto;
+    }
+
+    .service-card {
+        padding: 23px 20px;
+    }
+
+    .verification-notice {
+        margin-top: 25px;
+        padding: 17px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
+}

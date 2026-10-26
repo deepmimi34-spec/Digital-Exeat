@@ -131,7 +131,7 @@ INSTALLED_APPS = [
     # Add your own project apps here, for example:
     "schools",
     "authphone",
-    # "guardians",
+    "students",
     # "external_exeat",
     # "internal_exeat",
     # "announcements",
@@ -196,7 +196,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/schools/dashboard/"
+LOGIN_REDIRECT_URL = "/services/"
 ACCOUNT_LOGIN_REDIRECT_URL = "/schools/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
@@ -213,9 +213,7 @@ ACCOUNT_SESSION_REMEMBER = True
 
 ACCOUNT_ADAPTER = "authphone.adapter.DigitalExeatAccountAdapter"
 
-# Phone-based account login and registration.
-ACCOUNT_LOGIN_METHODS = {"phone"}
-ACCOUNT_SIGNUP_FIELDS = ["phone*"]
+
 
 # Require phone verification.
 ACCOUNT_PHONE_VERIFICATION_ENABLED = True
@@ -394,7 +392,12 @@ USE_TZ = True
 # STATIC FILES
 # ==========================================================
 
-STATIC_URL = "/static/"
+
+STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STORAGES = {

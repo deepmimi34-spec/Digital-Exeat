@@ -1,0 +1,263 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#101827">
+
+    <title>Choose a Service | Digital-Exeat</title>
+
+    {% load static %}
+
+    <link rel="stylesheet"
+          href="{% static 'accounts/service_selection.css' %}">
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- Top navigation -->
+    <header class="topbar">
+
+        <a class="brand" href="/" aria-label="Digital-Exeat homepage">
+            <span class="brand-mark">DE</span>
+
+            <span class="brand-text">
+                <strong>Digital-Exeat</strong>
+                <small>School services, made simpler</small>
+            </span>
+        </a>
+
+        <div class="account-area">
+            <span class="account-label">Signed in successfully</span>
+
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+
+                <button class="signout-button" type="submit">
+                    Sign out
+                </button>
+            </form>
+        </div>
+
+    </header>
+
+
+    <!-- Main section -->
+    <main class="main-content">
+
+        <section class="intro">
+
+            <span class="eyebrow">YOUR DIGITAL-EXEAT ACCOUNT</span>
+
+            <h1>How would you like to continue?</h1>
+
+            <p>
+                Choose the service you need. Whether you are a parent,
+                a student, or representing a school, you can get started
+                from here.
+            </p>
+
+        </section>
+
+
+        <!-- Service choices -->
+        <section class="service-grid" aria-label="Available services">
+
+            <!-- Parent or guardian -->
+            <article class="service-card">
+
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="9" cy="8" r="4"></circle>
+                        <path d="M2 21v-2a7 7 0 0 1 14 0v2"></path>
+                        <path d="M16 4.5a4 4 0 0 1 0 7.5"></path>
+                        <path d="M18 14a5 5 0 0 1 4 5v2"></path>
+                    </svg>
+                </div>
+
+                <h2>Parent or Guardian</h2>
+
+                <p class="service-description">
+                    Connect with your child's school and manage
+                    exeat requests in one convenient place.
+                </p>
+
+                <ul class="service-features">
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Link your child to your account
+                    </li>
+
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Submit and track exeat requests
+                    </li>
+
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Receive important school updates
+                    </li>
+                </ul>
+
+                <!-- Replace URL name with your actual parent entry route -->
+                <a class="service-action"
+                   href="{% url 'students:link_child' %}">
+                    Continue as Parent
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </a>
+
+            </article>
+
+
+            <!-- School registration -->
+            <article class="service-card school-card">
+
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 21h18"></path>
+                        <path d="M5 21V7l7-4 7 4v14"></path>
+                        <path d="M9 10h1"></path>
+                        <path d="M14 10h1"></path>
+                        <path d="M9 14h1"></path>
+                        <path d="M14 14h1"></path>
+                        <path d="M10 21v-4h4v4"></path>
+                    </svg>
+                </div>
+
+                <h2>Register a School</h2>
+
+                <p class="service-description">
+                    Bring your school onto Digital-Exeat and
+                    manage your school's services digitally.
+                </p>
+
+                <ul class="service-features">
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Submit your school's details
+                    </li>
+
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Request school verification
+                    </li>
+
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Access school administration after approval
+                    </li>
+                </ul>
+
+                <!-- Replace URL name with your actual school registration route -->
+                <a class="service-action"
+                   href="{% url 'schools:school_signup' %}">
+                    Register a School
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </a>
+
+            </article>
+
+
+            <!-- Student access -->
+            <article class="service-card student-card">
+
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="m2 8 10-5 10 5-10 5L2 8Z"></path>
+                        <path d="M6 10v6c3.5 3 8.5 3 12 0v-6"></path>
+                        <path d="M22 8v7"></path>
+                    </svg>
+                </div>
+
+                <h2>Student Access</h2>
+
+                <p class="service-description">
+                    Access the student services provided by
+                    your school through your verified account.
+                </p>
+
+                <ul class="service-features">
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Connect to your existing student record
+                    </li>
+
+                    <li>
+                        <span class="feature-check">✓</span>
+                        Access available school services
+                    </li>
+
+                    <li>
+                        <span class="feature-check">✓</span>
+                        View relevant announcements and updates
+                    </li>
+                </ul>
+
+                <!-- Replace URL name with your actual student entry route -->
+                <a class="service-action"
+                   href="{% url 'students:student_access' %}">
+                    Continue as Student
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </a>
+
+            </article>
+
+        </section>
+
+
+        <!-- Verification notice -->
+        <aside class="verification-notice">
+
+            <div class="notice-icon" aria-hidden="true">i</div>
+
+            <div>
+                <h3>Your account is not a role verification</h3>
+
+                <p>
+                    Signing in gives you access to your account, but
+                    it does not automatically make you a parent,
+                    student, or school administrator. Parents must
+                    verify their link to a child, students must be
+                    matched to an existing student record, and schools
+                    must be reviewed before administrative access is
+                    granted.
+                </p>
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            <strong>Digital-Exeat</strong>
+            &nbsp;·&nbsp; Secure, simple school services
+        </p>
+
+        <p>
+            Access depends on your school's verification and approval.
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>
