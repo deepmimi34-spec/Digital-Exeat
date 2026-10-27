@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import StudentLinkRequestForm, StudentAccessForm
 from .models import Student, ParentStudentLink, StudentAccessRequest
-
+from schools.models import School
 
 def normalize_name(value):
     return " ".join(value.casefold().split())

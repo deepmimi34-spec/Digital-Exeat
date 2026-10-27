@@ -11,6 +11,7 @@ from django.views.decorators.http import require_http_methods
 from .forms import SchoolRegistrationForm, SchoolLoginForm
 from .models import School
 
+
 User = get_user_model()
 
 
@@ -283,3 +284,4 @@ def no_school_access(request):
         "schools/no_school_access.html",
         status=403,
     )
+

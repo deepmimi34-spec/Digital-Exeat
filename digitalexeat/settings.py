@@ -132,7 +132,7 @@ INSTALLED_APPS = [
     "schools",
     "authphone",
     "students",
-    # "external_exeat",
+    "accounts",
     # "internal_exeat",
     # "announcements",
 ]
